@@ -1,15 +1,20 @@
 (ns instaparse-fuzz-wrapper.core
   (:require [com.code-intelligence.jazzer-clj.core :as fuzzing]
-            [instaparse.core :as insta]))
+            [clojure.java.io :as io]
+            [instaparse.core :as instaparse]))
 
-(def phone-uri-grammar-data (slurp "src/instaparse_fuzz_wrapper/phone_uri.txt"))
-
-(def phone-uri-grammar (insta/parser phone-uri-grammar-data))
+(instaparse/defparser
+    uri-parser
+    (io/resource "data/abnf_uri.txt")
+    :input-format :abnf
+    :instaparse.abnf/case-insensitive true)
 
 (fuzzing/deftarget instaparse_fuzz_wrapper.targets.first_try [input]
                    (let [string (.consumeRemainingAsString input)]
-                     (try (phone-uri-grammar string)
+                     (try (uri-parser string)
                           (catch Throwable e
-                            (when-not (re-matches #"Error parsing grammar specification" ;; FIXME
+                            (assert nil (ex-message e))
+                            (println "RuntimeException baby" (ex-message e))
+                            (when-not (re-matches #"Error parsing grammar specification"
                                                   (ex-message e))
                               (throw e))))))
