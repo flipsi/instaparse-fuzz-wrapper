@@ -13,8 +13,6 @@
                    (let [string (.consumeRemainingAsString input)]
                      (try (uri-parser string)
                           (catch Throwable e
-                            (assert nil (ex-message e))
-                            (println "RuntimeException baby" (ex-message e))
                             (when-not (re-matches #"Error parsing grammar specification"
                                                   (ex-message e))
                               (throw e))))))
