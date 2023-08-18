@@ -10,9 +10,14 @@ build : src/instaparse_fuzz_wrapper/core.clj
 fuzz : build
 	java -cp $(TARGET_JAR) $(TARGET_CLASSPATH) --target_class=$(TARGET_CLASS) \
 		--instrumentation_includes='instaparse.**' \
-		--ignore=ea655cd7f3abd65c
+		--ignore=ea655cd7f3abd65c,7090143765e6b69b,d8784df40506d34b \
+		inputcorpus
+
+clean-corpus :
+	rm inputcorpus/*
 
 clean :
+	rm inputcorpus/*
 	rm -f target/*
 
 .PHONY: all clean

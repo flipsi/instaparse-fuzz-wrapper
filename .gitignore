@@ -13,3 +13,5 @@ pom.xml.asc
 .hg/
 /crash-*
 /Crash_*
+/inputcorpus/*
+!/inputcorpus/init
